@@ -1,3 +1,7 @@
+"""Scrape bullmoose.com for Stock Status of used D&D Books for
+specific locations.
+"""
+
 import re
 import csv
 import os
@@ -52,7 +56,7 @@ def get_detail_stock(url_extension):
 
     div = soup.find("div", class_="avail-grid")
     if div is None:
-        stock["MillCreek"]="N/A" 
+        stock["MillCreek"]="N/A"
         stock["Scarborough"]="N/A"
     else:
         rows = div.find_all("td")
@@ -93,7 +97,7 @@ def send_email():
     with open("stock.csv", "rb") as f:
         data = f.read()
         f.close
-    
+
     encoded_file = base64.b64encode(data).decode()
 
     content = FileContent(encoded_file)
@@ -111,13 +115,13 @@ def send_email():
     print(response.headers)
 
 stock_list = []
-count = 0
-for count in range(0, 5):
+COUNT = 0
+for COUNT in range(0, 5):
     items = get_initial_stock()
     if not items:
         print("Empty List Found! Trying Again...")
-        count += 1
-        print("Attempt ", count)
+        COUNT += 1
+        print("Attempt ", COUNT)
         items = get_initial_stock()
     else:
         for item in items:
@@ -126,5 +130,3 @@ for count in range(0, 5):
 
 write_csv(stock_list)
 send_email()
-
-
