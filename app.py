@@ -80,15 +80,14 @@ def get_detail_stock(url_extension):
                 print("WHAT?")
     return stock
 
-def write_csv(stock_list):
+def write_csv(stock_inv):
     """Write stock info to local .csv
     """
-    
-    file = open("stock.csv", "w")
-    writer = csv.DictWriter(file, fieldnames=["Item_Title", "MillCreek", "Scarborough"])
-    writer.writeheader()
-    writer.writerows(stock_list)
-    file.close()
+
+    with open("stock.csv", "w") as file:
+        writer = csv.DictWriter(file, fieldnames=["Item_Title", "MillCreek", "Scarborough"])
+        writer.writeheader()
+        writer.writerows(stock_inv)
 
 def send_email():
     from_email = Email("admin@leblanc.sh")
