@@ -81,6 +81,9 @@ def get_detail_stock(url_extension):
     return stock
 
 def write_csv(stock_list):
+    """Write stock info to local .csv
+    """
+    
     file = open("stock.csv", "w")
     writer = csv.DictWriter(file, fieldnames=["Item_Title", "MillCreek", "Scarborough"])
     writer.writeheader()
