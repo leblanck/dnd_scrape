@@ -24,6 +24,9 @@ driver = webdriver.Chrome(options=options)
 #driver = webdriver.Remote("http://127.0.0.1:4444/wd/hub", options=options)
 
 def get_initial_stock():
+    """Get initial list of all items that are returned from search
+    """
+    
     driver.get("https://www.bullmoose.com/search?q=dungeons%20and%20dragons&so=0&page=1&af=-3288|-3")
     html = driver.page_source
     soup = BeautifulSoup(html)
@@ -39,6 +42,9 @@ def get_initial_stock():
 
 
 def get_detail_stock(url_extension):
+    """Get detail stock information for each item returned from search
+    """
+    
     driver.get(f"https://www.bullmoose.com{url_extension}")
     time.sleep(2)
     html = driver.page_source
@@ -90,15 +96,17 @@ def write_csv(stock_inv):
         writer.writerows(stock_inv)
 
 def send_email():
+    """Send email summary out with stock.csv attachment
+    """
+    
     from_email = Email("admin@leblanc.sh")
     to_email = To("kyle@leblanc.sh")
     subject = "DAILY D&D USED INVENTORY REPORT"
     content = Content("text/plain", "Roll an investigation check...")
     mail = Mail(from_email, to_email, subject, content)
 
-    with open("stock.csv", "rb") as f:
-        data = f.read()
-        f.close
+    with open("stock.csv", "rb") as csv_file:
+        data = csv_file.read()
 
     encoded_file = base64.b64encode(data).decode()
 
