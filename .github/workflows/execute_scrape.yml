@@ -1,6 +1,8 @@
 name: Execute Scrape
 
-on: [push]
+on:
+  schedule:
+    - cron: "0 8 * * *"
 
 jobs:
   build:
