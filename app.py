@@ -36,7 +36,7 @@ def get_initial_stock():
     for text in divs:
         link = text.find_all("a", href = re.compile('/pid/*'))
         for text in link:
-            href = (text['href'])
+            href = text['href']
             link_list.append(href)
     return link_list
 
