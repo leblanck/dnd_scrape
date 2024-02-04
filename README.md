@@ -10,5 +10,5 @@
 
 </div>
 
-### Scrape In-Stock Inventory for Used D&D Books from Retailer
+### Scrape In-Stock Inventory for Used D&D Books from Retailers
 
