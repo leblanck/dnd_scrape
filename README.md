@@ -12,3 +12,5 @@
 
 ### Scrape In-Stock Inventory for Used D&D Books from Retailers
 
+*Last Edit: 4/3/24*
+
