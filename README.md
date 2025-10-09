@@ -12,5 +12,5 @@
 
 ### Scrape In-Stock Inventory for Used D&D Books from Retailers
 
-*Last Edit: 2/4/25 to bump gh actions*
+*Last Edit: 10/9/25 to bump gh actions*
 
