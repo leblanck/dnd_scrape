@@ -1,5 +1,5 @@
 requests
 beautifulsoup4
 selenium
-sendgrid
+postmarker
 pylint

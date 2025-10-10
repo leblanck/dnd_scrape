@@ -17,5 +17,5 @@ jobs:
           pip install -r requirements.txt
       - name: Run actions/setup-python
         env:
-          SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+          POSTMARK_API_KEY: ${{ secrets.POSTMARK_API_KEY }}
         run: python3 app.py

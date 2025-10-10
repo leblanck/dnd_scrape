@@ -7,21 +7,21 @@ import csv
 import os
 import time
 import base64
-import sendgrid
-from sendgrid.helpers.mail import Mail, Attachment, FileContent, FileName, FileType, Disposition, Email, To, Content
+from postmarker.core import PostmarkClient
 from bs4 import BeautifulSoup
 from selenium.webdriver.chrome.options import Options
 from selenium import webdriver
 
-sg = sendgrid.SendGridAPIClient(api_key=os.environ.get("SENDGRID_API_KEY"))
+postmark = PostmarkClient(server_token=os.environ.get("POSTMARK_API_KEY"))
 
 options = Options()
 options.add_argument("--headless")
-#Use the following driver when running locally via CLI
+# Use the following driver when running locally via CLI
 driver = webdriver.Chrome(options=options)
 
-#Use the following driver when running via Docker
-#driver = webdriver.Remote("http://127.0.0.1:4444/wd/hub", options=options)
+# Use the following driver when running via Docker
+# driver = webdriver.Remote("http://127.0.0.1:4444/wd/hub", options=options)
+
 
 def get_initial_stock():
     """Get initial list of all items that are returned from search
@@ -86,6 +86,7 @@ def get_detail_stock(url_extension):
                 print("WHAT?")
     return stock
 
+
 def write_csv(stock_inv):
     """Write stock info to local .csv
     """
@@ -95,34 +96,30 @@ def write_csv(stock_inv):
         writer.writeheader()
         writer.writerows(stock_inv)
 
+
 def send_email():
     """Send email summary out with stock.csv attachment
     """
-
-    from_email = Email("admin@leblanc.sh")
-    to_email = To("kyle@leblanc.sh")
-    subject = "DAILY D&D USED INVENTORY REPORT"
-    content = Content("text/plain", "Roll an investigation check...")
-    mail = Mail(from_email, to_email, subject, content)
 
     with open("stock.csv", "rb") as csv_file:
         data = csv_file.read()
 
     encoded_file = base64.b64encode(data).decode()
 
-    content = FileContent(encoded_file)
-    name = FileName("stock.csv")
-    filetype = FileType("application/csv")
-    disposition = Disposition("attachment")
+    postmark.emails.send(
+        From='admin@leblanc.sh',
+        To='kyle@leblanc.sh',
+        Subject='DAILY D&D USED INVENTORY REPORT',
+        HtmlBody='<h1>Roll an investigation check...</h1>',
+        Attachments=[
+            {
+                'Name': 'stock.csv',
+                'Content': encoded_file,
+                'ContentType': 'text/csv'
+            }
+        ]
+    )
 
-    attached_file = Attachment(content, name, filetype, disposition)
-    mail.attachment = attached_file
-
-    mail_json = mail.get()
-
-    response = sg.client.mail.send.post(request_body=mail_json)
-    print(response.status_code)
-    print(response.headers)
 
 stock_list = []
 COUNT = 0
